@@ -1,0 +1,146 @@
+// Home
+.main-wrapper {
+  display: grid;
+  grid-template-columns: 300px auto;
+}
+
+// Header 
+.header {
+  margin: 0.5rem 0;
+  a {
+    font-size: 1.2rem;
+    color: #555;
+  }
+}
+
+// Search
+.search-wrapper {
+  input {
+    height: 40px;
+    border: 1px solid cornflowerblue;
+    border-radius: 4px;
+    padding: 0 5px;
+    font-size: 1.1rem;
+    outline: none;
+  }
+}
+
+// Product Lists
+.product-lists {
+  float: left;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
+  .product-card {
+    display: grid;
+    grid-template-rows: auto 50px;
+    border: 1px solid #999;
+    border-radius: 2px;
+    padding: 10px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    img {
+      height: 150px;
+      width: 150px;
+    }
+    .product-name {
+      font-family: monospace;
+      color: #555;
+      font-size: 1.2rem;
+    }
+    .button-wrapper {
+      button {
+        background: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        height: 40px;
+        width: 120px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+// Category List
+.category-wrapper {
+  select {
+    height: 40px;
+    background: transparent;
+    border: 1px solid cornflowerblue;
+    border-radius: 4px;
+    padding: 0 5px;
+    font-size: 1rem;
+    outline: none;
+    margin: 5px 0;
+    color: #555;
+  }
+}
+
+// Add item
+.add-item {
+  text-decoration: none;
+  color: #555;
+  p {
+    font-size: 1.5rem;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.message-info {
+  p {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #555;
+  }
+}
+
+// New item form
+.form-wrapper {
+  max-width: 500px;
+  width: 100%;
+  margin: 3rem auto;
+  h2 {
+    color: #555;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  .form {
+    display: grid;
+    grid-gap: 10px;
+    input {
+      height: 2.5rem;
+      padding: 0 5px;
+      font-size: 1rem;
+      border-radius: 2px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      outline: none;
+      &:focus {
+        border: 1px solid cornflowerblue;
+      }
+    }
+    input[type="file"] {
+      border: none;
+      padding: 0;
+    }
+    div {
+      input[type="submit"] {
+        background: transparent;
+        width: 5rem;
+        cursor: pointer;
+        &:hover {
+          border: 1px solid cornflowerblue;
+        }
+      }
+    }
+  }
+}
+
+// Loader
+.loader {
+  position: absolute;
+  top: 50%;
+  bottom: 50%;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
+}

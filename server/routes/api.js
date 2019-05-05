@@ -1,0 +1,21 @@
+const express = require('express');
+const router = express.Router()
+const product = require('../controller/product.controller');
+const category = require('../controller/category.controller');
+
+router.post('/addnewitem', product.addProduct);
+
+router.get('/', product.getProduct);
+
+router.get('/categorylist', category.getCategory);
+
+// router.get('/categorylist', product.getCategoryList);
+
+
+router.get('/categoryitem/:id', category.getSelectedItem);
+
+// router.post('/search', product.searchProductByNameOrCat);
+
+router.post('/search', category.searchProductByNameOrCat);
+
+module.exports =router;
