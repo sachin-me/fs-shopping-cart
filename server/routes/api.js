@@ -18,4 +18,6 @@ router.get('/categoryitem/:id', category.getSelectedItem);
 
 router.post('/search', category.searchProductByNameOrCat);
 
+router.get('/addtocart/:id', product.addToCart)
+
 module.exports =router;

@@ -88,6 +88,21 @@ const actions = {
         })
       }
     })
+  },
+
+  // adding items to cart
+  addToCart: (productId) => dispatch => {
+    console.log(productId, 'checking product id');
+    fetch(`${URL}/addtocart/${productId}`)
+    .then(res => res.json())
+    .then(products => {
+      if (products.message) {
+        dispatch({
+          type: 'ADD_TO_CART',
+          products
+        })
+      }
+    })
   }
 } 
 

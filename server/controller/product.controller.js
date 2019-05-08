@@ -92,7 +92,6 @@ module.exports = {
           'error': 'Could not populate category'
         })
       } else {
-        console.log(products, 'getting products');
         return res.json({
           'message': 'category populated, successfully',
           products
@@ -110,10 +109,6 @@ module.exports = {
           'error': 'No category item found'
         })
       } else {
-        var cArr = [];
-        items.forEach(item => {
-          console.log(item, 'getting category item');
-        });
         return res.json({
           'message': 'Getting category list',
           items
@@ -132,9 +127,28 @@ module.exports = {
           'error': 'No items found'
         })
       } else {
-        console.log(products, 'searching products'); 
         return res.json({
           'message': 'getting items from db',
+          products
+        })
+      }
+    })
+  },
+
+  // adding cart items
+  addToCart: (req, res) => {
+    const { id } = req.params;
+    console.log(id, 'checking product id');
+    Product.find({ _id: id }, (err, products) => {
+      if (err) {
+        console.log(err);
+        return res.json({
+          'error': 'No Item found'
+        })
+      } else {
+        console.log(products, 'adding items to cart');
+        return res.json({
+          'message': 'added to cart',
           products
         })
       }

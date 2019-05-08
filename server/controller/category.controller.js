@@ -6,14 +6,12 @@ module.exports = {
   getCategory: (req, res) => {
     Category.find({}, (err, cLists) => {
       const uniqueArray = uniqArr(cLists)
-      console.log(uniqueArray, 'checking unique array');
       if (err) {
         console.log(err);
         return res.json({
           'error': 'Could not get category list'
         })
       } else {
-        console.log(cLists, 'checking category list');
         return res.json({
           'message': 'Getting category list from db',
           cLists

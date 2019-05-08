@@ -5,7 +5,7 @@ import actions from './../store/actions';
 import ProductLists from './ProductLists';
 import Search from './Search';
 import Category from './Category';
-import RLoader from './RLoader';
+// import RLoader from './RLoader';
 
 class Home extends Component {
   state = {
@@ -39,11 +39,24 @@ class Home extends Component {
                 <ProductLists />
               </div>
             </>
-          ) : <RLoader />
+          ) : 'loading...'
         }
       </div>
     );
   }
 }
 
-export default connect(null)(Home);
+function loadData(store) {
+  return store.dispatch(actions.getProducts(success => {
+    if (success) {
+      this.setState({
+        loading: true
+      })
+    }
+  }));
+}
+
+export default {
+  component: connect(null)(Home),
+  loadData
+};

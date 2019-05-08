@@ -6,24 +6,25 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: [
-    './client/src/index.js',
-  ],
+  entry: {[
+    client: './client/src/index.js',
+    bundle: './src/bundle.js'
+  ]},
   module: {
     rules: [
       {
-        test: /\.js?$/,
+        test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        use: { loader: 'babel-loader' },
+        use: {
+         loader: 'babel-loader'
+        }
       },
       {
-        test: /\.(css|scss)$/,
+        test: /\.(scss|css)$/,
         use: [
-          { loader: MiniCssExtractPlugin.loader },
-          {
-            loader: 'css-loader',
-          },
-          { loader: 'sass-loader' }
+          "style-loader", // creates style nodes from JS strings
+          "css-loader", // translates CSS into CommonJS
+          "sass-loader" // compiles Sass to CSS, using Node Sass by default
         ]
       },
       {

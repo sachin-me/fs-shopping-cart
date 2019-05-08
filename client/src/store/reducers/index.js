@@ -1,10 +1,10 @@
-import actions from './../actions';
+// import actions from './../actions';
 
 const initState = {
   products: [],
-  // categories: ["Relevance", "Top Sellers", "Price Low to High", "Price High to Low", "Product Name A-Z", "Product Name Z-A", "Most Reviewed", "Highest Rated", "Most Viewed", "Newest Arrival"] ,
   categories: [],
-  message: ''
+  message: '',
+  carts: []
 }
 
 function rootReducer(state = initState, action) {
@@ -33,10 +33,10 @@ function rootReducer(state = initState, action) {
     }
 
     case 'GET_SEARCHED_ITEM' : {
-      const { response } = action.searchedItem;
+      const { response, products } = action.searchedItem;
       return {
         ...state,
-        products: response
+        products: products || response
       }
     }
 
@@ -53,9 +53,19 @@ function rootReducer(state = initState, action) {
         message: action.message
       }
     }
+
+    case 'ADD_TO_CART' : {
+      const { products } = action.products;
+      console.log(products, 'getting added items');
+      return {
+        ...state,
+        carts: products
+      }
+    }
     
     default: return state;
   }
 }
 
-export default rootReducer;
+export default rootReducer
+// module.exports = rootReducer;

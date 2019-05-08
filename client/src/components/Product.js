@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
+import { connect } from "react-redux";
+import actions from '../store/actions';
 
-export default class Product extends Component {
+class Product extends Component {
+
+  handleAddToCart = (productId) => {
+    this.props.dispatch(actions.addToCart(productId));
+  }
+  
   render() {
     const { product } = this.props;
     const { data } = product.image;
@@ -17,7 +24,7 @@ export default class Product extends Component {
               <p className="product-price">Price: {product.price}</p>
               <p className="product-qty">Quantity: {product.quantity}</p>
               <div className="button-wrapper">
-                <button>Add To Cart</button>
+                <button onClick={() => this.handleAddToCart(product._id)}>Add To Cart</button>
               </div>
             </div>
           ) : 'Loading...'
@@ -26,3 +33,5 @@ export default class Product extends Component {
     )
   }
 }
+
+export default connect(null)(Product)
