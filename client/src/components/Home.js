@@ -8,9 +8,13 @@ import Category from './Category';
 // import RLoader from './RLoader';
 
 class Home extends Component {
-  state = {
-    loading: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    }
   }
+
   componentDidMount() {
     this.props.dispatch(actions.getProducts(success => {
       if (success) {
@@ -18,7 +22,7 @@ class Home extends Component {
           loading: true
         })
       }
-    }));
+    }).bind(this));
   }
   
   render() {
@@ -46,17 +50,14 @@ class Home extends Component {
   }
 }
 
-function loadData(store) {
-  return store.dispatch(actions.getProducts(success => {
-    if (success) {
-      this.setState({
-        loading: true
-      })
-    }
-  }));
+
+const loadData = (store) => {
+  console.log(this, 'checking this');
+  console.log('loadData called', this)
+  return store.dispatch(actions.getProducts(() => {}).bind(this));
 }
 
 export default {
   component: connect(null)(Home),
-  loadData
+  loadData: loadData
 };

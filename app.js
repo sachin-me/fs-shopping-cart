@@ -23,6 +23,7 @@ import rootReducer from './client/src/store/reducers';
 import routes from './client/routes';
 import template from './helper';
 import store from './client/src/store/store';
+console.log(template, 'check template')
 
 const port = 8000;
 
@@ -111,14 +112,18 @@ app.use(require("./server/routes/index"));
 
 function getContent(req, res) {
   // MATCHING ROUTES FOR FETCHING DATA
+  console.log('getContent called');
   const promises = matchRoutes(routes, req.path).map(({route}) => {
-    
+    console.log(store, 'checking store in get content');
+    console.log('check1', route.loadData(store));
     // checking the url contains the post id or not 
     if(req.params.id) {
+      console.log('check2', req.params.id);
       // extract the index
       const postId = req.params.id
       return route.loadData(store, postId)
     }
+    console.log('check3')
     return route.loadData ? route.loadData(store) : null;
   });
   

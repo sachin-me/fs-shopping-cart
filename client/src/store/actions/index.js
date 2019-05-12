@@ -1,4 +1,5 @@
 import axios from 'axios';
+const fetch = require('node-fetch');
 const URL = 'http://localhost:8000/api'
 
 const actions = {
@@ -12,7 +13,7 @@ const actions = {
         type: 'GET_SELECTED_ITEM',
         selectedItem
       })
-    })
+    }).catch(error => console.log(error))
   },
 
   // Getting Items according to search value
@@ -30,7 +31,7 @@ const actions = {
         type: 'GET_SEARCHED_ITEM',
         searchedItem
       })
-    })
+    }).catch(error => console.log(error))
   },
   
   // Add new Items 
@@ -57,7 +58,7 @@ const actions = {
         })
         cb(true);
       }
-    })
+    }).catch(error => console.log(error))
   },
 
   // Get products from db
@@ -74,7 +75,7 @@ const actions = {
         })
         cb(true);
       }
-    })
+    }).catch(error => console.log(error))
   },
 
   getCategoryList: () => dispatch => {
@@ -87,7 +88,7 @@ const actions = {
           cLists
         })
       }
-    })
+    }).catch(error => console.log(error))
   },
 
   // adding items to cart
@@ -102,7 +103,7 @@ const actions = {
           products
         })
       }
-    })
+    }).catch(error => console.log(error))
   }
 } 
 
