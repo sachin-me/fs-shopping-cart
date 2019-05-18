@@ -12,18 +12,14 @@ import rootReducer from './store/reducers';
 import store from './store/store';
 import Header from './components/Header';
 import routes from '../routes';
+import Layout from './components/Layout';
+
+const store = createStore( window.REDUX_DATA );
 
 const jsx = (
 	<Provider store={store}>
 		<Router>
-			<>
-				<Header />
-				<main>
-					{
-						renderRoutes(routes)
-					}
-				</main>
-			</>
+			<Layout />
 		</Router>
 	</Provider>
 )

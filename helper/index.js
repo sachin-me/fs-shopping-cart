@@ -10,8 +10,9 @@ import { Helmet } from 'react-helmet';
 
 // template going to be rendered both client and server side
 
-export function template(path, store) {
-  const helmet = Helmet.renderStatic();
+module.exports = {
+  template: (path, store) => {
+    const helmet = Helmet.renderStatic();
   
   const jsx = renderToString(
     <Provider store={store}>
@@ -44,4 +45,5 @@ export function template(path, store) {
       </body>
     </html>
   `
-} 
+  }
+}

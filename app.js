@@ -1,151 +1,138 @@
-const express = require("express");
-const sassMiddleware = require('node-sass-middleware');
-const session = require("express-session");
-const app = express();
-const mongoose = require("mongoose");
-const MongoStore = require("connect-mongo")(session);
-const bodyParser = require("body-parser");
-const morgan = require('morgan');
-const cors = require("cors");
-const path = require("path");
+  const express = require("express");
+  const sassMiddleware = require('node-sass-middleware');
+  const session = require("express-session");
+  const app = express();
+  const mongoose = require("mongoose");
+  const MongoStore = require("connect-mongo")(session);
+  const bodyParser = require("body-parser");
+  const morgan = require('morgan');
+  const cors = require("cors");
+  const path = require("path");
 
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { StaticRouter } from "react-router-dom";
+  import React from 'react';
+  import { renderToString } from 'react-dom/server';
+  import { StaticRouter, matchPath } from "react-router-dom";
+  import Helmet from "react-helmet";
+  import { createStore } from 'redux';
+ 
+  import routes from './client/routes';
+  import Layout from './client/src/components/Layout';
 
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import {matchRoutes} from 'react-router-config';
+  const port = 8000;
 
-import App from './client/src/App';
-import rootReducer from './client/src/store/reducers';
-import routes from './client/routes';
-import template from './helper';
-import store from './client/src/store/store';
-console.log(template, 'check template')
+  mongoose.connect(
+   "mongodb://localhost/coolshop",
+   { useNewUrlParser: true },
+   function(err, connection) {
+    if (err) throw err;
+    else console.log("connected to mongodb");
+   }
+  )
 
-const port = 8000;
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(morgan('dev'));
 
-mongoose.connect(
- "mongodb://localhost/coolshop",
- { useNewUrlParser: true },
- function(err, connection) {
-  if (err) throw err;
-  else console.log("connected to mongodb");
- }
-)
+  app.use(sassMiddleware({
+    /* Options */
+    src: __dirname,
+    dest: path.join(__dirname, 'public'),
+    debug: true,
+    outputStyle: 'compressed',
+    prefix:  '/prefix'
+  }))
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+  app.use(express.static(path.join(__dirname, "public")));
 
-app.use(sassMiddleware({
-  /* Options */
-  src: __dirname,
-  dest: path.join(__dirname, 'public'),
-  debug: true,
-  outputStyle: 'compressed',
-  prefix:  '/prefix'
-}))
+  app.set("views", path.join(__dirname, "./server/views"));
+  app.set("view engine", "ejs");
 
-app.use(express.static(path.join(__dirname, "public")));
+  app.use(
+   session({
+    secret: "coolshop",
+    resave: true,
+    saveUninitialized: true,
+    store: new MongoStore({ url: "mongodb://localhost/coolshop-session" })
+   })
+  );
 
-app.set("views", path.join(__dirname, "./server/views"));
-app.set("view engine", "ejs");
+  if (process.env.NODE_ENV === "development") {
 
-app.use(
- session({
-  secret: "coolshop",
-  resave: true,
-  saveUninitialized: true,
-  store: new MongoStore({ url: "mongodb://localhost/coolshop-session" })
- })
-);
+   var webpack = require("webpack");
+   var webpackConfig = require("./webpack.config");
+   var compiler = webpack(webpackConfig);
 
-if (process.env.NODE_ENV === "development") {
+   app.use(
+    require("webpack-dev-middleware")(compiler, {
+     noInfo: true,
+     publicPath: webpackConfig.output.publicPath
+    })
+   );
 
- var webpack = require("webpack");
- var webpackConfig = require("./webpack.config");
- var compiler = webpack(webpackConfig);
+   app.use(require("webpack-hot-middleware")(compiler));
+  }
 
- app.use(
-  require("webpack-dev-middleware")(compiler, {
-   noInfo: true,
-   publicPath: webpackConfig.output.publicPath
-  })
- );
+  app.use(cors());
 
- app.use(require("webpack-hot-middleware")(compiler));
-}
+  require('./server/models/Product');
+  require('./server/models/Category');
 
-app.use(cors());
+  app.use("/api", require("./server/routes/api"));
+  app.use(require("./server/routes/index"));
 
-// app.get( "/*", ( req, res ) => {
+  app.get( "/*", ( req, res ) => {
+      const context = { };
+      const store = createStore( );
 
-//   const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
+      // store.dispatch( initializeSession( ) );
 
-//   const context = {};
+      const dataRequirements =
+          routes
+              .filter( route => matchPath( req.url, route ) ) // filter matching paths
+              .map( route => route.component ) // map to components
+              .filter( comp => comp.serverFetch ) // check if components have data requirement
+              .map( comp => store.dispatch( comp.serverFetch( ) ) ); // dispatch data requirement
 
-//   const jsx = ( 
-//     <Provider store={ store } >
-//       <StaticRouter context={ context } location={ req.url }>
-//         <App /> 
-//       </StaticRouter>
-//     </Provider> 
-//   );
-//   const reactDom = renderToString(jsx);
+      Promise.all( dataRequirements ).then( ( ) => {
+        const jsx = (
+            <ReduxProvider store={ store }>
+                <StaticRouter context={ context } location={ req.url }>
+                  <Layout />  
+                </StaticRouter>
+            </ReduxProvider>
+        );
+        const reactDom = renderToString( jsx );
+        const reduxState = store.getState( );
+        const helmetData = Helmet.renderStatic( );
 
-//   res.writeHead( 200, { "Content-Type": "text/html" } );
-//   res.end( htmlTemplate( reactDom ) );
-// });
+        res.writeHead( 200, { "Content-Type": "text/html" } );
+        res.end( htmlTemplate( reactDom, reduxState, helmetData ) );
+    } );
+  } );
 
-app.get('/', (req, res) => {
-  getContent(req, res);
-})
-
-require('./server/models/Product');
-require('./server/models/Category');
-
-app.use("/api", require("./server/routes/api"));
-app.use(require("./server/routes/index"));
-
-function getContent(req, res) {
-  // MATCHING ROUTES FOR FETCHING DATA
-  console.log('getContent called');
-  const promises = matchRoutes(routes, req.path).map(({route}) => {
-    console.log(store, 'checking store in get content');
-    console.log('check1', route.loadData(store));
-    // checking the url contains the post id or not 
-    if(req.params.id) {
-      console.log('check2', req.params.id);
-      // extract the index
-      const postId = req.params.id
-      return route.loadData(store, postId)
-    }
-    console.log('check3')
-    return route.loadData ? route.loadData(store) : null;
+  app.listen(port, () => {
+   console.log(`server is running on http://localhost:${port}`);
   });
-  
-  Promise.all(promises).then(() => {
-    return res.send(template(req.path, store))
-  });
-}
 
-app.listen(port, () => {
- console.log(`server is running on http://localhost:${port}`);
-});
-
-function htmlTemplate( reactDom, reduxState ) {
+  function htmlTemplate( reactDom, reduxState, helmetData ) {
     return `
-      /* ... */
-      
-      <div id="app">${ reactDom }</div>
-      <script>
-          window.REDUX_DATA = ${ JSON.stringify( reduxState ) }
-      </script>
-      <script src="./app.bundle.js"></script>
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            ${ helmetData.title.toString( ) }
+            ${ helmetData.meta.toString( ) }
+            <meta name="304workaround" content="2013-10-24 21:17:23">
+            <title>React SSR</title>
+        </head>
         
-      /* ... */
+        <body>
+            <div id="app">${ reactDom }</div>
+            <script>
+                window.REDUX_DATA = ${ JSON.stringify( reduxState ) }
+            </script>
+            <script src="./app.bundle.js"></script>
+        </body>
+        </html>
     `;
-}
+  }

@@ -9,6 +9,7 @@ const composeEnhancers =
       // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
     }) : compose;
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+const store = ( initialState ) =>
+    createStore( reducer, initialState, applyMiddleware( thunkMiddleware ) );
 
 export default store;

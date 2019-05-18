@@ -50,14 +50,4 @@ class Home extends Component {
   }
 }
 
-
-const loadData = (store) => {
-  console.log(this, 'checking this');
-  console.log('loadData called', this)
-  return store.dispatch(actions.getProducts(() => {}).bind(this));
-}
-
-export default {
-  component: connect(null)(Home),
-  loadData: loadData
-};
+export default connect(null)(Home)

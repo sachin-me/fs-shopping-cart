@@ -3,13 +3,13 @@ import NewItem from "../src/components/NewItem"
 
 export default [
   {
-    ...Home,
     path: '/',
+    component: Home,
     exact: true
   },
   {
-    ...NewItem,
     path: '/addnewitem',
+    component: NewItem,
     exact: true
   }
 ]
