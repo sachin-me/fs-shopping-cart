@@ -3,8 +3,7 @@
   const session = require("express-session");
   const app = express();
   const mongoose = require("mongoose");
-  const MongoStore = require("connect-mongo")(session);
-  const bodyParser = require("body-parser");
+  const MongoStore = require("connect-mongo");
   const morgan = require('morgan');
   const cors = require("cors");
   const path = require("path");
@@ -22,15 +21,15 @@
 
   mongoose.connect(
    "mongodb://localhost/coolshop",
-   { useNewUrlParser: true },
+   { useNewUrlParser: true, useUnifiedTopology: true },
    function(err, connection) {
     if (err) throw err;
     else console.log("connected to mongodb");
    }
   )
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   app.use(morgan('dev'));
 
   app.use(sassMiddleware({
@@ -52,7 +51,7 @@
     secret: "coolshop",
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({ url: "mongodb://localhost/coolshop-session" })
+    store: new MongoStore({ mongoUrl: "mongodb://localhost/coolshop-session" })
    })
   );
 
@@ -64,7 +63,6 @@
 
    app.use(
     require("webpack-dev-middleware")(compiler, {
-     noInfo: true,
      publicPath: webpackConfig.output.publicPath
     })
    );
@@ -73,9 +71,6 @@
   }
 
   app.use(cors());
-
-  require('./server/models/Product');
-  require('./server/models/Category');
 
   app.use("/api", require("./server/routes/api"));
   app.use(require("./server/routes/index"));
