@@ -11,7 +11,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false
+      loading: true
     }
   }
 
@@ -19,7 +19,11 @@ class Home extends Component {
     this.props.dispatch(actions.getProducts(success => {
       if (success) {
         this.setState({
-          loading: true
+          loading: false
+        })
+      } else {
+        this.setState({
+          loading: false
         })
       }
     }).bind(this));
@@ -30,7 +34,7 @@ class Home extends Component {
     return (
       <div className="main-wrapper">
         {
-          loading ? (
+          !loading ? (
             <>
               <div className="search-bar">
                 <Search />

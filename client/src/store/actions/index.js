@@ -1,5 +1,3 @@
-import axios from 'axios';
-const fetch = require('node-fetch');
 const URL = 'http://localhost:8000/api'
 
 const actions = {

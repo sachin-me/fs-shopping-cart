@@ -1,30 +1,28 @@
 /* eslint-disable */
 var webpack = require('webpack');
-var path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: {
-    client: './client/src/index.js',
-    bundle: './src/bundle.js'
-  },
+  entry: [
+    './client/src/index.js',
+  ],
   module: {
     rules: [
       {
-        test: /\.(js|jsx)?$/,
+        test: /\.js?$/,
         exclude: /node_modules/,
-        use: {
-         loader: 'babel-loader'
-        }
+        use: { loader: 'babel-loader' },
       },
       {
-        test: /\.(scss|css)$/,
+        test: /\.scss$/,
         use: [
-          "style-loader", // creates style nodes from JS strings
-          "css-loader", // translates CSS into CommonJS
-          "sass-loader" // compiles Sass to CSS, using Node Sass by default
+          { loader: MiniCssExtractPlugin.loader },
+          {
+            loader: 'css-loader',
+          },
+          { loader: 'sass-loader' }
         ]
       },
       {
