@@ -1,15 +1,30 @@
+body {
+  margin: 0;
+}
+
 // Home
-.main-wrapper {
-  display: grid;
-  grid-template-columns: 300px auto;
+.search-bar {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 2rem;
 }
 
 // Header 
 .header {
-  margin: 0.5rem 0;
+  background: #A45D5D;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
   a {
     font-size: 1.2rem;
-    color: #555;
+    color: #EFEFEF;
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 
@@ -58,6 +73,12 @@
       }
     }
   }
+}
+
+.no-product {
+  margin-top: 4rem;
+  text-align: center;
+  font-size: 1.5rem;
 }
 
 // Category List

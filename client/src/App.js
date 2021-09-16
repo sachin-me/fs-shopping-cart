@@ -14,7 +14,7 @@ class App extends Component {
             <Header />
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/addnewitem" component={NewItem} />
+              <Route path="/create-item" component={NewItem} />
             </Switch>
           </>
         </BrowserRouter>
