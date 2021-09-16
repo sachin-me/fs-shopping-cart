@@ -39,9 +39,6 @@ class Home extends Component {
               <div className="search-bar">
                 <Search />
                 <Category />
-                <Link to="/addnewitem" className="add-item">
-                  <p>Add new item</p>
-                </Link>
               </div>
               <div>
                 <ProductLists />
