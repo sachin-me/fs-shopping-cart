@@ -3,9 +3,9 @@ const router = express.Router()
 const product = require('../controller/product.controller');
 const category = require('../controller/category.controller');
 
-router.post('/addnewitem', product.addProduct);
+router.post('/create-item', product.addProduct);
 
-router.get('/', product.getProduct);
+router.get('/products', product.getProduct);
 
 router.get('/categorylist', category.getCategory);
 

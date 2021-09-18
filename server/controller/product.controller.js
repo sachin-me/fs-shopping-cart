@@ -69,21 +69,7 @@ module.exports = {
 
   // getting items from db
   getProduct: (req, res) => {
-    Product.find({}, (err, products) => {
-      if (err) {
-        console.log(err);
-        // return res.json({
-        //   error: 'Could not get data from db'
-        // })
-      } 
-      // else {
-      //   console.log(products, 'getting products');
-      //   return res.json({
-      //     'message': 'category populated, successfully',
-      //     products
-      //   })
-      // }
-    })
+    Product.find({})
     .populate('category')
     .exec((err, products) => {
       if (err) {

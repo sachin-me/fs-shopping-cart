@@ -1,4 +1,4 @@
-const URL = 'http://localhost:8000/api'
+const URL = '/api'
 
 const actions = {
 
@@ -34,7 +34,7 @@ const actions = {
   
   // Add new Items 
   addNewItem: (data, cb) => dispatch => {
-    fetch(`${URL}/addnewitem`, {
+    fetch(`${URL}/create-item`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ const actions = {
 
   // Get products from db
   getProducts: (cb) => dispatch => {
-    fetch(`${URL}`)
+    fetch(`${URL}/products`)
     .then(res => res.json())
     .then(products => {
       if (products.error) {
